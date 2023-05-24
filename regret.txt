@@ -1,0 +1,37 @@
+# Day 2 of learning CMake = Regret...
+
+set(foo ab) # foo = "ab"
+set(bar ${foo}cd) # bar = "abcd"
+
+# OMG WHY WOULD YOU HAVE THIS BE A THING?!?!?!?!?!?!?!?
+set(baz ${foo} cd) # baz = "ab;cd"
+set(myVar ba) # myVar = "ba"
+
+# ?!?!?!?!?!?!?! EXCUSE ME ?!?!?!?!?!?!?!?!?!?!
+set(big "${${myVar}r}ef") # big = "${bar}ef" = "abcdef"
+set(${foo} xyz) # ab = "xyz"
+set(bar ${notSetVar}) # bar = ""
+
+# We're getting into some wild stuff now lol
+set(myVar foo)                  # Local myVar
+set(result ${myVar})            # result = foo
+set(myVar  bar CACHE STRING "") # Cache myVar
+
+set(result ${myVar})            # First run:        result = bar
+                                # Subsequent runs:  result = foo
+
+# Doesn't affect the cached verison thi just overwrites ther local var
+set(myVar fre)
+set(result ${myVar})            # result = fred
+
+It's probably stuff like this that some people dislike CMake or at least
+have had some really bad experiences in the past. I am hoping there are warnings
+when something might not behave as you'd expect especially if it's version dependant.
+
+In CMake 3.13, the behavior of option() was changed such that if a normal variable already exists
+with the same name, the command does nothing. This newer behavior is typically what developers
+intuitively expect. A similar change was made for the set() command in CMake 3.21, but note the
+following differences in the new behavior for both commands
+
+In all seriousness all this probably has good reasons to be the way it is. I just have to learn more
+about CMake and see what I really think.

@@ -2,3 +2,4 @@
 **/.nvim-build
 **/.cache
 **/.build
+**/build
